@@ -6,7 +6,12 @@ import os
 
 app = Flask(__name__)
 app.secret_key = 'cyhack_secret_key_2026'
-DB_PATH = 'database.db'
+
+# Vercel needs writable /tmp for SQLite
+if os.environ.get('VERCEL'):
+    DB_PATH = '/tmp/database.db'
+else:
+    DB_PATH = 'database.db'
 
 # Quiz Questions
 QUESTIONS = [
