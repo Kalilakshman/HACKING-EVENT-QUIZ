@@ -244,7 +244,9 @@ def admin_results():
         
     return jsonify({"status": "success", "results": formatted_results})
 
+# Initialize DB on start
+with app.app_context():
+    init_db()
+
 if __name__ == '__main__':
-    if not os.path.exists(DB_PATH):
-        init_db()
     app.run(debug=True, port=5000)
