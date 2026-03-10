@@ -10,11 +10,15 @@
 
 <body>
     <canvas id="matrix-canvas"></canvas>
+    <div id="overlay">
+        <div class="warning-text" id="warning-message">Violation Detected!</div>
+    </div>
 
     <div class="container">
         <div class="card" id="admin-login-card" style="max-width: 400px;">
             <h1>ADMIN LOGIN</h1>
-            <input type="password" id="admin-pass" placeholder="ADMIN PASSWORD">
+            <input type="password" id="admin-pass" placeholder="ADMIN PASSWORD"
+                onkeypress="if(event.key==='Enter') adminLogin()">
             <button onclick="adminLogin()">ENTER DASHBOARD</button>
             <p id="admin-error" style="color: #ff3131; margin-top: 10px;"></p>
         </div>
@@ -41,33 +45,37 @@
     <script src="{{ url_for('static', filename='js/security.js') }}"></script>
     <script>
         async function adminLogin() {
-            const pass = document.getElementById('admin-pass').value;
-            const resp = await fetch('/admin_results', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password: pass })
-            });
+            try {
+                const pass = document.getElementById('admin-pass').value;
+                const resp = await fetch('/admin_results', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pass })
+                });
 
-            const data = await resp.json();
-            if (data.status === 'success') {
-                document.getElementById('admin-login-card').style.display = 'none';
-                document.getElementById('admin-dashboard-card').style.display = 'block';
+                const data = await resp.json();
+                if (data.status === 'success') {
+                    document.getElementById('admin-login-card').style.display = 'none';
+                    document.getElementById('admin-dashboard-card').style.display = 'block';
 
-                const body = document.getElementById('admin-results-body');
-                body.innerHTML = '';
-                data.results.forEach(res => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
+                    const body = document.getElementById('admin-results-body');
+                    body.innerHTML = '';
+                    data.results.forEach(res => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
                         <td>${res.team_name}</td>
                         <td>${res.score}</td>
                         <td>${res.correct_answers}</td>
                         <td>${res.wrong_answers}</td>
                         <td>${res.time_finished}</td>
                     `;
-                    body.appendChild(tr);
-                });
-            } else {
-                document.getElementById('admin-error').innerText = data.message;
+                        body.appendChild(tr);
+                    });
+                } else {
+                    document.getElementById('admin-error').innerText = data.message || "Login failed";
+                }
+            } catch (err) {
+                document.getElementById('admin-error').innerText = "Server error or connection failed.";
             }
         }
     </script>
