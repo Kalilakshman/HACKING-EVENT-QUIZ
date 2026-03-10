@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACKING - Leaderboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="container">
+        <div class="card" style="max-width: 800px;">
+            <h1>LEADERBOARD</h1>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Team Name</th>
+                        <th>Score</th>
+                        <th>Correct</th>
+                        <th>Wrong</th>
+                        <th>Time Finished</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in results %}
+                    <tr>
+                        <td>{{ res.team_name }}</td>
+                        <td>{{ res.score }}</td>
+                        <td>{{ res.correct_answers }}</td>
+                        <td>{{ res.wrong_answers }}</td>
+                        <td>{{ res.time_finished }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button onclick="window.location.href='/'">RESTART ACCESS</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/security.js') }}"></script>
+    <script>
+        // Disable back to quiz
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.location.href = '/';
+        };
+    </script>
+</body>
+
+</html>

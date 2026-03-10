@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACKING - Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div id="overlay">
+        <div class="warning-text" id="warning-message">Violation Detected!</div>
+    </div>
+
+    <div class="container">
+        <div class="card" id="quiz-card">
+            <div id="timer" class="timer">60</div>
+            <h2 id="question-text">Loading Question...</h2>
+            <div id="options" class="options-container">
+                <!-- Options will be injected here -->
+            </div>
+            <div id="progress" style="margin-top: 20px; font-size: 0.8rem; font-style: italic;">
+                Question 1 / 20
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/security.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+</body>
+
+</html>

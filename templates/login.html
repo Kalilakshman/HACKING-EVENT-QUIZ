@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACKING - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div id="overlay">
+        <div class="warning-text" id="warning-message">Violation Detected!</div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h1>HACKING</h1>
+            <p>Cybersecurity Quiz Competition</p>
+            <div style="margin-top: 30px;">
+                <input type="text" id="team-name" placeholder="TEAM NAME" autocomplete="off">
+                <input type="password" id="access-code" placeholder="ACCESS CODE" autocomplete="off">
+                <button onclick="handleLogin()">ACCESS SYSTEM</button>
+            </div>
+            <p id="error-msg" style="color: #ff3131; margin-top: 20px;"></p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/security.js') }}"></script>
+    <script>
+        async function handleLogin() {
+            const teamName = document.getElementById('team-name').value;
+            const code = document.getElementById('access-code').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            const resp = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ team_name: teamName, code: code })
+            });
+
+            const data = await resp.json();
+            if (data.status === 'success') {
+                enterFullscreen();
+                window.location.href = '/quiz';
+            } else {
+                errorMsg.innerText = data.message;
+            }
+        }
+    </script>
+</body>
+</html>
